@@ -1,5 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const SquareButton = styled.button`
   width: 100px;
@@ -12,6 +23,7 @@ const SquareButton = styled.button`
   align-items: center;
   justify-content: center;
   border-radius: 5px;
+  animation: ${fadeIn} 1s ease-out;
 `;
 
 const BoardSquare = ({ value, onClick }) => {

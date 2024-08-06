@@ -1,5 +1,16 @@
 import React from "react";
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const Banner = styled.div`
   position: absolute;
@@ -7,6 +18,7 @@ const Banner = styled.div`
   width: clamp(300px, 90vw, 600px);
   text-align: center;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(21, 255, 25, 0.9) 25%, rgba(21, 255, 25, 0.9) 75%, rgba(255, 255, 255, 0) 100%);
+  animation: ${fadeIn} 0.5s ease-out;
 `;
 
 const Button = styled.button`
@@ -17,10 +29,10 @@ const Button = styled.button`
 `
 
 const ResultBanner = ({state, onResetGame}) => {
-    return <Banner>
-        {state.matches('win') && <p>Player {state.context.currentPlayer} WIN!</p>}
+    return <Banner data-testid="banner">
+        {state.matches('won') && <p>Player {state.context.currentPlayer} WIN!</p>}
         {state.matches('draw') && <p>Draw!</p>}
-        {(state.matches('win') || state.matches('draw')) &&
+        {(state.matches('won') || state.matches('draw')) &&
             <Button onClick={onResetGame}>
                 Reset
             </Button>

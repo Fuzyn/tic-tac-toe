@@ -102,7 +102,7 @@ const TheGame = () => {
             <h1>Tic-Tac-Toe Game</h1>
             <h3>Current Player: {state.context.currentPlayer === 'X' ? 'X' : 'O'}</h3>
             <GameBoard board={state.context.board} onClick={handleClick} />
-            <ResultBanner state={state} onResetGame={() => send({ type: 'RESET_GAME' })}/>
+            {(state.matches('won') || state.matches('draw')) && <ResultBanner state={state} onResetGame={() => send({type: 'RESET_GAME'})}/>}
         </GameContainer>
     );
 };
