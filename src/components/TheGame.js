@@ -1,92 +1,26 @@
 import React from 'react';
 import { useMachine } from '@xstate/react';
-import {assign, createMachine} from 'xstate';
 import styled from 'styled-components';
 import GameBoard from './GameBoard';
-import {winPossibilities} from "./CommonHandlers";
 import ResultBanner from "./ResultBanner";
+import {gameMachine} from "./GameMachine";
 
 const GameContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
+  padding-bottom: 20px;
 `;
 
-const gameMachine = createMachine({
-    id: 'the-game',
-    initial: 'playing',
-    context: {
-        board: Array(9).fill(null),
-        currentPlayer: 'X',
-    },
-    states: {
-        playing: {
-            on: {
-                MAKE_MOVE: {
-                    actions: 'makeMove',
-                    target: 'evaluate'
-                }
-            }
-        },
-        evaluate: {
-            always: [
-                { target: 'won', guard: 'isWinningMove' },
-                { target: 'draw', guard: 'isDraw' },
-                { target: 'playing', actions: 'switchPlayer' }
-            ]
-        },
-        won: {
-            on: {
-                RESET_GAME: { actions: 'resetGame', target: 'playing' }
-            }
-        },
-        draw: {
-            on: {
-                RESET_GAME: { actions: 'resetGame', target: 'playing' }
-            }
-        }
-    }
-}, {
-    actions: {
-        makeMove: assign({
-            board: (context) => {
-                if (context.context.board[context.event.index] !== null) return context.context.board;
-
-                const newBoard = [...context.context.board];
-                newBoard[context.event.index] = context.context.currentPlayer;
-                return newBoard;
-            }
-        }),
-        switchPlayer: assign({
-            currentPlayer: (context) => (context.context.currentPlayer === 'X' ? 'O' : 'X')
-        }),
-        resetGame: assign({
-            board: () => Array(9).fill(null),
-            currentPlayer: () => 'X'
-        }),
-    },
-    guards: {
-        canMakeMove: (context) => {
-            return context.context.board[context.event.index] === null;
-        },
-        isWinningMove: (context) => {
-            const { board, currentPlayer } = context.context;
-
-            return winPossibilities.some((pattern) => {
-                const [a, b, c] = pattern;
-                return (
-                    board[a] === currentPlayer &&
-                    board[b] === currentPlayer &&
-                    board[c] === currentPlayer
-                );
-            });
-        },
-        isDraw: (context) => {
-            return context.context.board.every(cell => cell !== null);
-        }
-    }
-});
+const SizeButton = styled.button`
+  padding: 10px;
+  font-size: 20px;
+  background: khaki;
+  border-radius: 5px;
+  margin: 5px;
+  cursor: pointer;
+`
 
 const TheGame = () => {
     const [state, send] = useMachine(gameMachine);
@@ -97,11 +31,25 @@ const TheGame = () => {
         }
     };
 
+    const handleResize = (size) => {
+        send({ type: 'RESIZE', size });
+    }
+
     return (
         <GameContainer>
-            <h1>Tic-Tac-Toe Game</h1>
+            <h1 align='center'>Tic-Tac-Toe Game</h1>
+            <div>
+                <SizeButton onClick={() => handleResize(3)}>3 x 3</SizeButton>
+                <SizeButton onClick={() => handleResize(4)}>4 x 4</SizeButton>
+                <SizeButton onClick={() => handleResize(5)}>5 x 5</SizeButton>
+            </div>
             <h3>Current Player: {state.context.currentPlayer === 'X' ? 'X' : 'O'}</h3>
-            <GameBoard board={state.context.board} onClick={handleClick} />
+            <GameBoard
+                board={state.context.board}
+                onClick={handleClick}
+                size={state.context.size}
+            />
+            <p>{state.context.size} characters must be in one line</p>
             {(state.matches('won') || state.matches('draw')) && <ResultBanner state={state} onResetGame={() => send({type: 'RESET_GAME'})}/>}
         </GameContainer>
     );

@@ -13,8 +13,8 @@ const fadeIn = keyframes`
 `;
 
 const SquareButton = styled.button`
-  width: 100px;
-  height: 100px;
+  width: clamp(40px, 100px, 15vw);
+  height: clamp(40px, 100px, 15vw);
   font-size: 34px;
   cursor: pointer;
   background-color: #fff;
@@ -28,7 +28,7 @@ const SquareButton = styled.button`
 
 const BoardSquare = ({ value, onClick }) => {
     return (
-        <SquareButton onClick={onClick}>
+        <SquareButton data-testid="square-button" onClick={onClick}>
             {value}
         </SquareButton>
     );

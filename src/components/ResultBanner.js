@@ -17,7 +17,7 @@ const Banner = styled.div`
   top: 100px;
   width: clamp(300px, 90vw, 600px);
   text-align: center;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(21, 255, 25, 0.9) 25%, rgba(21, 255, 25, 0.9) 75%, rgba(255, 255, 255, 0) 100%);
+  background: ${props => `linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, ${props.isWin ? 'rgba(21, 255, 25, 0.9)' : 'rgba(236, 255, 95, 0.9)'} 25%, ${props.isWin ? 'rgba(21, 255, 25, 0.9)' : 'rgba(236, 255, 95, 0.9)'} 75%, rgba(255, 255, 255, 0) 100%)`};
   animation: ${fadeIn} 0.5s ease-out;
 `;
 
@@ -29,7 +29,7 @@ const Button = styled.button`
 `
 
 const ResultBanner = ({state, onResetGame}) => {
-    return <Banner data-testid="banner">
+    return <Banner data-testid="banner" isWin={state.matches('won')}>
         {state.matches('won') && <p>Player {state.context.currentPlayer} WIN!</p>}
         {state.matches('draw') && <p>Draw!</p>}
         {(state.matches('won') || state.matches('draw')) &&

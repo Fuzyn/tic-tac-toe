@@ -4,14 +4,14 @@ import TheGame from "./components/TheGame";
 
 describe('Game component', () => {
     it('Renders the game board with 9 fields', () => {
-        const { getAllByRole } = render(<TheGame />);
-        const cells = getAllByRole('button');
+        const { getAllByTestId } = render(<TheGame />);
+        const cells = getAllByTestId('square-button');
         expect(cells.length).toBe(9);
     });
 
     it('Allows players to make moves', () => {
-        const { getAllByRole, getByText } = render(<TheGame />);
-        const cells = getAllByRole('button');
+        const { getByText, getAllByTestId } = render(<TheGame />);
+        const cells = getAllByTestId('square-button');
 
         fireEvent.click(cells[0]);
         expect(cells[0].textContent).toBe('X');
@@ -23,8 +23,8 @@ describe('Game component', () => {
     });
 
     it('Declares the winner correctly (X win)', () => {
-        const { getAllByRole, getByText, getByTestId } = render(<TheGame />);
-        const cells = getAllByRole('button');
+        const { getAllByTestId, getByText, getByTestId } = render(<TheGame />);
+        const cells = getAllByTestId('square-button');
 
         fireEvent.click(cells[0]);
         fireEvent.click(cells[3]);
@@ -41,8 +41,8 @@ describe('Game component', () => {
     });
 
     it('Declares the winner correctly (O win)', () => {
-        const { getAllByRole, getByText, getByTestId } = render(<TheGame />);
-        const cells = getAllByRole('button');
+        const { getAllByTestId, getByText, getByTestId } = render(<TheGame />);
+        const cells = getAllByTestId('square-button');
 
         fireEvent.click(cells[3]);
         fireEvent.click(cells[0]);
@@ -60,8 +60,8 @@ describe('Game component', () => {
     });
 
     it('Declares a draw correctly', () => {
-        const { getAllByRole, getByText, getByTestId } = render(<TheGame />);
-        const cells = getAllByRole('button');
+        const { getAllByTestId, getByText, getByTestId } = render(<TheGame />);
+        const cells = getAllByTestId('square-button');
 
         fireEvent.click(cells[0]);
         fireEvent.click(cells[1]);
@@ -82,8 +82,8 @@ describe('Game component', () => {
     });
 
     it('Resets the game correctly', () => {
-        const { getAllByRole, getByText, getByTestId } = render(<TheGame />);
-        const cells = getAllByRole('button');
+        const { getAllByTestId, getByText, getByTestId } = render(<TheGame />);
+        const cells = getAllByTestId('square-button');
 
         fireEvent.click(cells[3]);
         fireEvent.click(cells[0]);

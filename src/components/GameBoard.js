@@ -4,14 +4,14 @@ import BoardSquare from './BoardSquare';
 
 const BoardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 100px);
-  grid-template-rows: repeat(3, 100px);
+  grid-template-columns: ${props => props.size === 3 ? 'repeat(3, clamp(40px, 100px, 15vw))' : props.size === 4 ? 'repeat(4, clamp(40px, 100px, 15vw))' : 'repeat(5, clamp(40px, 100px, 15vw))'};
+  grid-template-rows: ${props => props.size === 3 ? 'repeat(3, clamp(40px, 100px, 15vw))' : props.size === 4 ? 'repeat(4, clamp(40px, 100px, 15vw))' : 'repeat(5, clamp(40px, 100px, 15vw))'};
   gap: 5px;
 `;
 
-const GameBoard = ({ board, onClick }) => {
+const GameBoard = ({ board, onClick, size }) => {
     return (
-        <BoardContainer>
+        <BoardContainer size={size}>
             {board.map((value, index) => (
                 <BoardSquare
                     key={index}
